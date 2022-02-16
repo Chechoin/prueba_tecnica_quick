@@ -18,6 +18,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+import io
+from rest_framework.parsers import JSONParser
 import uuid
 
 
@@ -87,6 +89,8 @@ class ExportImportExcel(APIView):
     def get(self, request):
         clients_obj = Clients.objects.all()
         serializer = ClientSerializer(clients_obj, many=True)
+        
+
         df = pd.DataFrame(serializer.data)
         df.to_csv(f"static/excel/{uuid.uuid4()}.csv", encoding="UTF-8", index=False)
         return Response({'status':200})
